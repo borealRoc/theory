@@ -1,0 +1,20 @@
+{
+  "name": "theory",
+  "version": "1.0.0",
+  "description": "简单实现一些框架的原理",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/borealRoc/theory.git"
+  },
+  "keywords": [],
+  "author": "xusp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/borealRoc/theory/issues"
+  },
+  "homepage": "https://github.com/borealRoc/theory#readme"
+}
