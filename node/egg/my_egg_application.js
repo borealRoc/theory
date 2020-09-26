@@ -4,12 +4,15 @@ const { initRouter, initController, initService, loadConfig, initSchedule } = re
 class MyEgg {
     constructor(conf) {
         this.$app = new koa(conf);
-        loadConfig(this)
-        this.$service = initService(this)
-        this.$ctrl = initController(this); // 先初始化控制器，路由对它有依赖
-        this.$router = initRouter(this); // 把MyEgg实例传进去
+
+        loadConfig(this) // model 在 service 前面初始化，因为 service 对 model 有依赖
+        this.$service = initService(this) // service 在 controler 前面初始化，因为 controler 对 service 有依赖
+        this.$ctrl = initController(this); // controler 在 routes 前面初始化，因为 routes 对 controler 有依赖
+        this.$router = initRouter();
         this.$app.use(this.$router.routes());
-        // initSchedule()
+
+        // 执行定时器任务
+        initSchedule()
     }
     start(port) {
         this.$app.listen(port, () => {
@@ -17,4 +20,5 @@ class MyEgg {
         });
     }
 }
+
 module.exports = MyEgg;

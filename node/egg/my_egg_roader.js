@@ -19,20 +19,69 @@ function load(dir, cb) {
     });
 }
 
-function initRouter() {
+function initRouter(app) {
     const router = new Router();
     load("routes", (filename, routes) => {
-        // 若是index⽆前缀，别的⽂件前缀就是⽂件名
+        // 若是index无前缀，别的文件前缀就是文件名 
         const prefix = filename === "index" ? "" : `/${filename}`;
-        // 遍历路由并添加到路由器
+        // 判断路由类型，若为函数需传递app进去 
+        routes = typeof routes == "function" ? routes(app) : routes;
+        // 遍历路由并添加到路由器 
         Object.keys(routes).forEach(key => {
             const [method, path] = key.split(" ");
-            console.log(`正在映射地址：${method.toLocaleUpperCase()}${prefix}${path}`);
-            // 执⾏router.method(path, handler)注册路由
-            router[method](prefix + path, routes[key]);
+            console.log(`initRouter ${method.toLocaleUpperCase()} ${prefix}${path}`);
+            // 执行router.method(path, handler)注册路由 
+            // router[method](prefix + path, routes[key]);
+            router[method](prefix + path, async ctx => {
+                app.ctx = ctx // 挂载⾄app
+                await routes[key](app) //路由处理器现在接收到的是app
+            })
         });
     });
     return router;
 }
 
-module.exports = { initRouter };
+function initController(app) {
+    const controllers = {}
+    // 读取控制器目录 
+    load("controller", (filename, controller) => {
+        // 添加路由 
+        console.log('initController', filename, controller)
+        controllers[filename] = controller(app);
+    });
+    return controllers;
+}
+
+function initService(app) {
+    const services = {}
+    load('service', (filename, service) => {
+        console.log('initService', filename, service)
+        services[filename] = service(app)
+    })
+    return services
+}
+
+const Sequelize = require('sequelize')
+function loadConfig(app) {
+    load('config', (filename, conf) => {
+        // 创建模型
+        if (conf.db) {
+            app.$db = new Sequelize(conf.db)
+            // 加载模型
+            app.$model = {}
+            load('model', (filename, { schema, options }) => {
+                app.$model[filename] = app.$db.define(filename, schema, options)
+            })
+            app.$db.sync()
+        }
+        // 执行中间件
+        if (conf.middleware) {
+            conf.middleware.forEach(mid => {
+                const midPath = path.resolve(__dirname, 'middleware', mid)
+                app.$app.use(require(midPath))
+            })
+        }
+    })
+}
+
+module.exports = { initRouter, initController, initService, loadConfig };
