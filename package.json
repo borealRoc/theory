@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/borealRoc/theory#readme",
   "dependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/parser": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/traverse": "^7.10.3",
     "koa": "^2.13.0",
     "koa-router": "^9.1.0",
     "mysql2": "^2.1.0",
