@@ -1,8 +1,13 @@
 # 目录说明
 ## Vue 相关
-1.\vue\src\theory\myVueRouter\ 手写简版Vue Router
-2.\vue\src\theory\myVuex\ 手写简版Vuex
-3.\vue\src\theory\myVue\ 手写简版Vue
+1. \vue\myVue\ 手写简版Vue
+2. \vue\myVueRouter\ 手写简版Vue Router
+3. \vue\myVuex\ 手写简版Vuex
+4. \vue\myVuex\virtualDOMTheory 虚拟DOM原理浅析
+## React 相关
+1. \react\myRedux.js 手写简版Redux
+2. \react\myReactRedux.js 手写简版React Redux
+3. \react\myReactRouter.js 手写简版React Router
 ## Node 相关
 1. \node\express\my_express.js 手写简版 express
 2. \node\koa\my_koa.js 手写简版 koa
